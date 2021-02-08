@@ -42,12 +42,11 @@ numpy.set_printoptions(threshold=sys.maxsize)
 
 
 
-# construct the argument parser and parse the arguments
+# construct the argument parser
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
 	help="path to the input image")
 args = vars(ap.parse_args())
-
 
 
 # load the input image using the Keras helper utility while ensuring
@@ -59,15 +58,13 @@ image = image_utils.load_img(args["image"], target_size=(224, 224))
 image = image_utils.img_to_array(image)
 
 
-# our image is now represented by a NumPy array of shape (224, 224, 3),
-# assuming TensorFlow "channels last" ordering of course, but we need
-# to expand the dimensions to be (1, 3, 224, 224) so we can pass it
-# through the network -- we'll also preprocess the image by subtracting
+# expanding the dimensions to be (1, 3, 224, 224) so we can pass it
+# through the network, preprocessing the image by subtracting
 # the mean RGB pixel intensity from the ImageNet dataset
 image = np.expand_dims(image, axis=0)
 image = preprocess_input(image)
 
-# load the VGG16 network pre-trained on the ImageNet dataset
+# load the network pre-trained on the ImageNet dataset
 print("[INFO] loading network...")
 model = ResNet50(weights="imagenet")
 # classify the image
